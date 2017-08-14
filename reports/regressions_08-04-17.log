@@ -1,0 +1,114 @@
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /disk/homedirs/nber/bergerb/healthcare-employment/reports/regressions_08-04-17.log
+  log type:  text
+ opened on:  14 Aug 2017, 13:39:05
+
+. 
+. *Generate average population over 2010-2014
+. order state health* population*
+
+. egen avg_population_10_14 = rowmean(population2010-population2014)
+
+. 
+. *Generate spending growth (healthcare spending in chained 2014 dollars by state)
+. gen spendGrow_10_14 = log(healthSpend2014) - log(healthSpend2010)
+
+. gen spendGrow_04_09 = log(healthSpend2009) - log(healthSpend2004)
+
+. 
+. *Generate employment growth (number of healthcare employees by state)
+. gen employGrow_10_14 = log(healthEmploy2014) - log(healthEmploy2010)
+(10 missing values generated)
+
+. gen employGrow_04_09 = log(healthEmploy2009) - log(healthEmploy2004)
+(10 missing values generated)
+
+. 
+. *Estimate models
+. reg spendGrow_10_14     employGrow_10_14  ///
+>                         [aw=avg_population_10_14], robust 
+(sum of wgt is   2.9081e+08)
+
+Linear regression                               Number of obs     =         41
+                                                F(1, 39)          =      11.82
+                                                Prob > F          =     0.0014
+                                                R-squared         =     0.2794
+                                                Root MSE          =     .02747
+
+----------------------------------------------------------------------------------
+                 |               Robust
+ spendGrow_10_14 |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-----------------+----------------------------------------------------------------
+employGrow_10_14 |    .712368   .2072263     3.44   0.001     .2932133    1.131523
+           _cons |   .0370467    .012322     3.01   0.005     .0121232    .0619702
+----------------------------------------------------------------------------------
+
+. 
+. reg spendGrow_10_14     employGrow_10_14 employGrow_04_09 ///
+>                         [aw=avg_population_10_14], robust
+(sum of wgt is   2.9081e+08)
+
+Linear regression                               Number of obs     =         41
+                                                F(2, 38)          =       5.90
+                                                Prob > F          =     0.0059
+                                                R-squared         =     0.2909
+                                                Root MSE          =     .02761
+
+----------------------------------------------------------------------------------
+                 |               Robust
+ spendGrow_10_14 |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-----------------+----------------------------------------------------------------
+employGrow_10_14 |   .6478851   .2635228     2.46   0.019     .1144112    1.181359
+employGrow_04_09 |   .0952125   .2161125     0.44   0.662    -.3422844    .5327093
+           _cons |   .0301587   .0197498     1.53   0.135    -.0098227    .0701402
+----------------------------------------------------------------------------------
+
+. 
+. reg spendGrow_10_14     employGrow_10_14 employGrow_04_09 spendGrow_04_09 ///
+>                         [aw=avg_population_10_14], robust
+(sum of wgt is   2.9081e+08)
+
+Linear regression                               Number of obs     =         41
+                                                F(3, 37)          =       3.90
+                                                Prob > F          =     0.0162
+                                                R-squared         =     0.3065
+                                                Root MSE          =     .02767
+
+----------------------------------------------------------------------------------
+                 |               Robust
+ spendGrow_10_14 |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-----------------+----------------------------------------------------------------
+employGrow_10_14 |   .6275276   .2649155     2.37   0.023     .0907579    1.164297
+employGrow_04_09 |  -.0151258   .2529539    -0.06   0.953    -.5276591    .4974076
+ spendGrow_04_09 |   .1452622   .1683002     0.86   0.394    -.1957463    .4862708
+           _cons |   .0193151   .0249342     0.77   0.443    -.0312064    .0698366
+----------------------------------------------------------------------------------
+
+. 
+. reg spendGrow_10_14     employGrow_04_09 spendGrow_04_09 ///
+>                         [aw=avg_population_10_14], robust
+(sum of wgt is   2.9081e+08)
+
+Linear regression                               Number of obs     =         41
+                                                F(2, 38)          =       1.22
+                                                Prob > F          =     0.3064
+                                                R-squared         =     0.1277
+                                                Root MSE          =     .03062
+
+----------------------------------------------------------------------------------
+                 |               Robust
+ spendGrow_10_14 |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-----------------+----------------------------------------------------------------
+employGrow_04_09 |   .0952036   .2478208     0.38   0.703    -.4064834    .5968907
+ spendGrow_04_09 |   .1994268   .2084985     0.96   0.345    -.2226564      .62151
+           _cons |   .0392161    .028327     1.38   0.174    -.0181289    .0965611
+----------------------------------------------------------------------------------
+
+. 
+. log close
+      name:  <unnamed>
+       log:  /disk/homedirs/nber/bergerb/healthcare-employment/reports/regressions_08-04-17.log
+  log type:  text
+ closed on:  14 Aug 2017, 13:39:06
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

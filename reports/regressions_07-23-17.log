@@ -1,0 +1,66 @@
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /disk/homedirs/nber/bergerb/healthcare-employment/source/../reports/regressions_07-23-17.log
+  log type:  text
+ opened on:  23 Jul 2017, 17:01:11
+
+. 
+. *Generate spending growth (healthcare spending in chained 2009 dollars by state)
+. gen spendGrow_10_14 = log(healthSpend2014) - log(healthSpend2010)
+
+. gen spendGrow_04_09 = log(healthSpend2009) - log(healthSpend2004)
+
+. 
+. *Generate employment growth (number of healthcare employees by state)
+. gen employGrow_10_14 = log(healthEmploy2014) - log(healthEmploy2010)
+(10 missing values generated)
+
+. gen employGrow_04_09 = log(healthEmploy2009) - log(healthEmploy2004)
+(10 missing values generated)
+
+. 
+. reg spendGrow_10_14 ///
+>     employGrow_04_09 spendGrow_04_09, robust
+
+Linear regression                               Number of obs     =         41
+                                                F(2, 38)          =       1.73
+                                                Prob > F          =     0.1915
+                                                R-squared         =     0.1377
+                                                Root MSE          =     .03479
+
+----------------------------------------------------------------------------------
+                 |               Robust
+ spendGrow_10_14 |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-----------------+----------------------------------------------------------------
+employGrow_04_09 |   .0940435   .1858072     0.51   0.616    -.2821036    .4701906
+ spendGrow_04_09 |   .2349341    .181498     1.29   0.203    -.1324893    .6023575
+           _cons |    .032084    .027037     1.19   0.243    -.0226496    .0868176
+----------------------------------------------------------------------------------
+
+. 
+. reg spendGrow_10_14 ///
+>     employGrow_10_14 employGrow_04_09 spendGrow_04_09, robust
+
+Linear regression                               Number of obs     =         41
+                                                F(3, 37)          =       5.07
+                                                Prob > F          =     0.0048
+                                                R-squared         =     0.2561
+                                                Root MSE          =     .03274
+
+----------------------------------------------------------------------------------
+                 |               Robust
+ spendGrow_10_14 |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-----------------+----------------------------------------------------------------
+employGrow_10_14 |    .508077   .2576396     1.97   0.056    -.0139505    1.030104
+employGrow_04_09 |  -.0352255   .2442903    -0.14   0.886    -.5302047    .4597536
+ spendGrow_04_09 |   .1665685   .1604877     1.04   0.306    -.1586105    .4917475
+           _cons |   .0278355   .0232173     1.20   0.238    -.0192072    .0748783
+----------------------------------------------------------------------------------
+
+. 
+. log close 
+      name:  <unnamed>
+       log:  /disk/homedirs/nber/bergerb/healthcare-employment/source/../reports/regressions_07-23-17.log
+  log type:  text
+ closed on:  23 Jul 2017, 17:01:11
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

@@ -1,0 +1,69 @@
+{smcl}
+{txt}{sf}{ul off}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}/disk/homedirs/nber/bergerb/healthcare-employment/source/../reports/regressions_07-23-17.txt
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res}23 Jul 2017, 16:54:10
+{txt}
+{com}. 
+. *Generate spending growth (healthcare spending in chained 2009 dollars by state)
+. gen spendGrow_10_14 = log(healthSpend2014) - log(healthSpend2010)
+{txt}
+{com}. gen spendGrow_04_09 = log(healthSpend2009) - log(healthSpend2004)
+{txt}
+{com}. 
+. *Generate employment growth (number of healthcare employees by state)
+. gen employGrow_10_14 = log(healthEmploy2014) - log(healthEmploy2010)
+{txt}(10 missing values generated)
+
+{com}. gen employGrow_04_09 = log(healthEmploy2009) - log(healthEmploy2004)
+{txt}(10 missing values generated)
+
+{com}. 
+. reg spendGrow_10_14 ///
+>     employGrow_04_09 spendGrow_04_09, robust
+
+{txt}Linear regression                               Number of obs     = {res}        41
+                                                {txt}F(2, 38)          =  {res}     1.73
+                                                {txt}Prob > F          = {res}    0.1915
+                                                {txt}R-squared         = {res}    0.1377
+                                                {txt}Root MSE          =    {res} .03479
+
+{txt}{hline 17}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 18}{c |}{col 30}    Robust
+{col 1} spendGrow_10_14{col 18}{c |}      Coef.{col 30}   Std. Err.{col 42}      t{col 50}   P>|t|{col 58}     [95% Con{col 71}f. Interval]
+{hline 17}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+employGrow_04_09 {c |}{col 18}{res}{space 2} .0940435{col 30}{space 2} .1858072{col 41}{space 1}    0.51{col 50}{space 3}0.616{col 58}{space 4}-.2821036{col 71}{space 3} .4701906
+{txt}{space 1}spendGrow_04_09 {c |}{col 18}{res}{space 2} .2349341{col 30}{space 2}  .181498{col 41}{space 1}    1.29{col 50}{space 3}0.203{col 58}{space 4}-.1324893{col 71}{space 3} .6023575
+{txt}{space 11}_cons {c |}{col 18}{res}{space 2}  .032084{col 30}{space 2}  .027037{col 41}{space 1}    1.19{col 50}{space 3}0.243{col 58}{space 4}-.0226496{col 71}{space 3} .0868176
+{txt}{hline 17}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. 
+. reg spendGrow_10_14 ///
+>     employGrow_10_14 employGrow_04_09 spendGrow_04_09, robust
+
+{txt}Linear regression                               Number of obs     = {res}        41
+                                                {txt}F(3, 37)          =  {res}     5.07
+                                                {txt}Prob > F          = {res}    0.0048
+                                                {txt}R-squared         = {res}    0.2561
+                                                {txt}Root MSE          =    {res} .03274
+
+{txt}{hline 17}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 18}{c |}{col 30}    Robust
+{col 1} spendGrow_10_14{col 18}{c |}      Coef.{col 30}   Std. Err.{col 42}      t{col 50}   P>|t|{col 58}     [95% Con{col 71}f. Interval]
+{hline 17}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+employGrow_10_14 {c |}{col 18}{res}{space 2}  .508077{col 30}{space 2} .2576396{col 41}{space 1}    1.97{col 50}{space 3}0.056{col 58}{space 4}-.0139505{col 71}{space 3} 1.030104
+{txt}employGrow_04_09 {c |}{col 18}{res}{space 2}-.0352255{col 30}{space 2} .2442903{col 41}{space 1}   -0.14{col 50}{space 3}0.886{col 58}{space 4}-.5302047{col 71}{space 3} .4597536
+{txt}{space 1}spendGrow_04_09 {c |}{col 18}{res}{space 2} .1665685{col 30}{space 2} .1604877{col 41}{space 1}    1.04{col 50}{space 3}0.306{col 58}{space 4}-.1586105{col 71}{space 3} .4917475
+{txt}{space 11}_cons {c |}{col 18}{res}{space 2} .0278355{col 30}{space 2} .0232173{col 41}{space 1}    1.20{col 50}{space 3}0.238{col 58}{space 4}-.0192072{col 71}{space 3} .0748783
+{txt}{hline 17}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. 
+. log close 
+      {txt}name:  {res}<unnamed>
+       {txt}log:  {res}/disk/homedirs/nber/bergerb/healthcare-employment/source/../reports/regressions_07-23-17.txt
+  {txt}log type:  {res}smcl
+ {txt}closed on:  {res}23 Jul 2017, 16:54:11
+{txt}{.-}
+{smcl}
+{txt}{sf}{ul off}
