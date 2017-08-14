@@ -1,8 +1,10 @@
-#Description: Source code, data, and output files for healthcare spending and employment project.
+#Healthcare Spending and Employment 
 
-#Author: Ben Berger (b.a.berger.94@gmail.com)
+## Description: Source code, data, and output files for healthcare spending and employment project.
 
-#Data sources: 
+## Author: Ben Berger (b.a.berger.94@gmail.com)
+
+## Data sources: 
 
 1.	-File Path: "data/Employment health care jan 6_16_16.xlsx"
  
