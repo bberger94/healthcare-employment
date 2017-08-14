@@ -1,4 +1,5 @@
 Description: Source code, data, and output files for healthcare spending and employment project.
+
 Author: Ben Berger (b.a.berger.94@gmail.com)
 
 Data sources: 
