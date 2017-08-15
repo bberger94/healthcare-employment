@@ -10,7 +10,8 @@ clear all
 set more off
 
 local data_dir "data"
-local healthEmploy_data "`data_dir'/Employment health care jan 6_16_16.xlsx"
+local healthEmploy_data "`data_dir'/Employment_health_care_8-15-17.xlsx"
+//local healthEmploy_data "`data_dir'/Employment health care jan 6_16_16.xlsx"
 local employ_data "`data_dir'/employment_bls.xlsx"
 local spend_data "`data_dir'/resident-state-estimates/US_PER_CAPITA14.CSV"
 local gdp_deflator "`data_dir'/gdp_deflator.xlsx"
@@ -136,5 +137,5 @@ twoway 	line healthEmploy_total year || ///
 			label(3 "Per Capita Real Health Expenditure") ///
 			) 
 
-
+graph export "figures/figure-01.eps", replace
 
