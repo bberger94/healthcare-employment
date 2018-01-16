@@ -119,7 +119,7 @@ drop _merge
 order state year healthSpend healthEmploy population
 
 * Write the data to file
-save "data/processed/state-year-long.dta", replace
+save "data/processed/health_panel_data.dta", replace
 
 *************************************************************************
 *************************************************************************
