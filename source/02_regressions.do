@@ -12,13 +12,12 @@ clear all
 set more off
 
 local data_dir "data"
-local healthEmploy_data "`data_dir'/Employment health care jan 6_16_16.xlsx"
-local employ_data "`data_dir'/employment_bls.xlsx"
-local provider_spend_data "`data_dir'/provider-state-estimates/PROV_US_AGGREGATE14.CSV"
-local gdp_deflator "`data_dir'/gdp_deflator.xlsx"
-local pop_data "`data_dir'/resident-state-estimates/US_POPULATION14.CSV" 
+local healthEmploy_data "`data_dir'/raw/Employment health care jan 6_16_16.xlsx"
+local employ_data "`data_dir'/raw/employment_bls.xlsx"
+local provider_spend_data "`data_dir'/raw/provider-state-estimates/PROV_US_AGGREGATE14.CSV"
+local gdp_deflator "`data_dir'/raw/gdp_deflator.xlsx"
+local pop_data "`data_dir'/raw/resident-state-estimates/US_POPULATION14.CSV" 
 
-!mkdir "`data_dir'/temp"
 !mkdir "`data_dir'/processed"
 
 ********************************************************************************
@@ -34,7 +33,9 @@ rename y* population*
 
 reshape long population , i(state) j(year)
 replace population = population * 1000
-save "`data_dir'/population_long.dta", replace
+
+tempfile population_long
+save "`population_long'"
 
 
 ********************************************************************************
@@ -60,7 +61,9 @@ replace state = trim(state)
 
 keep year state healthEmploy
 sort state year
-save "`data_dir'/healthEmploy_long.dta", replace
+
+tempfile healthEmploy_long
+save "`healthEmploy_long'"
 
 
 ********************************************************************************
@@ -79,7 +82,8 @@ rename y* healthSpend*
 reshape long healthSpend , i(state) j(year) 
 replace healthSpend = healthSpend * 1000000
 
-save "`data_dir'/temp/spend_temp_long.dta", replace
+tempfile healthSpend_long
+save "`healthSpend_long'", replace
 
 *Adjust for inflation (chained 2014 dollars)
 import excel using `gdp_deflator', clear ///
@@ -90,7 +94,7 @@ summarize gdp_deflator if year == 2014
 local base_year_deflator `r(min)'
 replace gdp_deflator = gdp_deflator / `base_year_deflator'
 
-merge 1:m year using `data_dir'/temp/spend_temp_long, ///
+merge 1:m year using `healthSpend_long', ///
 	keep(3) nogenerate
 
 replace healthSpend = healthSpend / gdp_deflator
@@ -100,27 +104,32 @@ label variable healthSpend "Healthcare expenditure (Chained 2014 dollars)"
 keep year state healthSpend
 sort state year
 
-save "`data_dir'/healthSpend_long.dta", replace
+tempfile healthSpend_long
+save "`healthSpend_long'"
 
 
 ********************************************************************************
 ********************************************************************************
 **Merge all data together
 ********************************************************************************
-merge 1:1 state year using "`data_dir'/population_long.dta"
+merge 1:1 state year using "`population_long'"
 drop _merge
-merge 1:1 state year using "`data_dir'/healthEmploy_long.dta"
+merge 1:1 state year using "`healthEmploy_long'"
 drop _merge
+order state year healthSpend healthEmploy population
 
+* Write the data to file
+save "data/processed/state-year-long.dta", replace
+
+*************************************************************************
+*************************************************************************
+*************************************************************************
+*************************************************************************
 /*Reshape so that each row corresponds to a state
 and each column corresponds to a variable x year pair  */
 reshape wide health* population*, i(state) j(year)
 
-*************************************************************************
-*************************************************************************
-*************************************************************************
-*************************************************************************
-log using "reports/regressions_08-04-17.log", replace
+* log using "reports/regressions_08-04-17.log", replace
 
 *Generate average population over 2010-2014
 order state health* population*
@@ -147,17 +156,7 @@ reg spendGrow_10_14 	employGrow_10_14 employGrow_04_09 spendGrow_04_09 ///
 reg spendGrow_10_14 	employGrow_04_09 spendGrow_04_09 ///
 			[aw=avg_population_10_14], robust
 
-log close
-
-
-
-
-
-
-
-
-
-
+*log close
 
 
 

@@ -17,7 +17,6 @@ local spend_data "`data_dir'/raw/resident-state-estimates/US_PER_CAPITA14.CSV"
 local gdp_deflator "`data_dir'/raw/gdp_deflator.xlsx"
 local first_year 2000
 
-!mkdir "`data_dir'/temp"
 
 ********************************************************************************
 ********************************************************************************
