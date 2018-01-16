@@ -1,12 +1,12 @@
-# Data sources 
+# Data 
 
-1.	-File Path: ```data/raw/Employment health care jan 6_16_16.xlsx```
+1.	-File Path: ```data/raw/Employment_health_care_8-15-17.xlsx```
  
 	-Description: Health employment by year and state
 
 	-Years: 1990-2015
 
-	-Notes: Data are aggregated from approximately 100 BLS time series of employment data. Aggregated data are listed in the "Master" sheet of the file while state-level monthly series are listed with their FRED series ID in their own sheets. Data was collected by Jan Ketterson at Dartmouth. More detailed notes on this data are presented in ```documentation/Notes on Ketterson data.pdf```. The 2015 employment figures herein seem to slightly differ from figures found on the BLS website. We should be able to obtain data from this source through 2016 with some effort.
+	-Notes: Data are aggregated from approximately 100 BLS time series of employment data. Aggregated data are listed in the "Master" sheet of the file while state-level monthly series are listed with their FRED series ID in their own sheets. Data was collected by Jan Ketterson at Dartmouth. More detailed notes on this data are presented in ```documentation/Notes on Ketterson data.pdf```. The 2015 employment figures herein seem to slightly differ from figures found on the BLS website. 2016 figures were added by Ben Berger.
 
 
 2.	-File Path: ```data/raw/resident-state-estimates/US_PER_CAPITA14.CSV```
