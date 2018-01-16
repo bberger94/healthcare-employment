@@ -12,4 +12,4 @@ data <-
   select(state, year, everything()) %>% 
   arrange(state, year)
 
-write_dta(data, 'data/health_spending_and_employment.dta')
+write_dta(data, 'data/health_data.dta')
