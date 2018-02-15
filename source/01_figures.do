@@ -13,8 +13,9 @@ local data_dir "data"
 local healthEmploy_data "`data_dir'/raw/Employment_health_care_8-15-17.xlsx"
 //local healthEmploy_data "`data_dir'/Employment health care jan 6_16_16.xlsx"
 local employ_data "`data_dir'/raw/employment_bls.xlsx"
-local spend_data "`data_dir'/raw/resident-state-estimates/US_PER_CAPITA14.CSV"
+local spend_data "`data_dir'/raw/provider-state-estimates/PROV_US_AGGREGATE14.CSV"
 local gdp_deflator "`data_dir'/raw/gdp_deflator.xlsx"
+local pop_data "`data_dir'/raw/resident-state-estimates/US_POPULATION14.CSV" 
 local first_year 2000
 
 
@@ -68,20 +69,40 @@ save "`employ'"
 **Load Healthcare expenditures data
 ********************************************************************************
 import delimited "`spend_data'", clear
-keep if region_name == "United States"
+keep if state_name != ""
 
-keep y*
+rename state_name state
+keep state y*
 rename y* spend_nom*
-collapse (sum) *
-gen id = 1
 
-reshape long spend_nom, i(id) j(year)
-drop id
+collapse (sum) spend_nom* , by(state)
+
+reshape long spend_nom, i(state) j(year)
+replace spend_nom = spend_nom * 1000000
+
 keep if year >= `first_year'
 
 tempfile health_spend
 save "`health_spend'"
 
+********************************************************************************
+********************************************************************************
+** Merge population data to create per capita spending
+********************************************************************************
+import delimited "`pop_data'", clear
+keep if group == "State"
+keep state_name y*
+
+rename state_name state 
+rename y* population*
+
+reshape long population , i(state) j(year)
+replace population = population * 1000
+
+merge 1:1 state year using `health_spend', keep(3) nogenerate
+
+tempfile health_spend
+save "`health_spend'"
 
 ********************************************************************************
 **Adjust for inflation
@@ -94,18 +115,21 @@ summarize gdp_deflator if year == 2014
 local base_year_deflator `r(min)'
 replace gdp_deflator = gdp_deflator / `base_year_deflator'
 
-merge m:1 year using `health_spend', ///
+merge 1:m year using `health_spend', ///
 	keep(3) nogenerate
 
-gen spend_real = spend_nom / gdp_deflator
+gen double spend_real = spend_nom / gdp_deflator
 
-keep year spend_real
+collapse (sum) population spend_real, by(year)
 
+gen spend_real_pc = spend_real / population
+
+keep year spend_real_pc
 tempfile health_spend
 save `health_spend', replace
 
 
-********************************************************************************
+*******************************************************************************
 ********************************************************************************
 *Merge together data for plotting
 ********************************************************************************
@@ -118,7 +142,7 @@ sort year
 /*    Scale each variable so that their
       value in 2000 (or whatever is the first year in data) = 100  */
       
-foreach var of varlist employ_total healthEmploy_total spend_real {
+foreach var of varlist employ_total healthEmploy_total spend_real_pc {
 	summarize `var' if year == `first_year'
 	replace `var' = `var'/`r(min)' * 100
 }
@@ -130,7 +154,7 @@ foreach var of varlist employ_total healthEmploy_total spend_real {
 twoway 	///
 	line healthEmploy_total year || ///
 	line employ_total year || ///
-	line spend_real year , ///
+	line spend_real_pc year , ///
 	title("National Health Employment and Expenditure") ///
 	xtitle("Year") ///
 	yaxis(1 2) ///
