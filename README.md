@@ -4,6 +4,6 @@
 
 ## Author: Ben Berger (b.a.berger.94@gmail.com)
 
-Run all scripts from this directory. Scripts can be run in a bash shell with ```bash source/run_scripts.sh```.
+Run all scripts from this directory. Scripts can be run in a bash shell with ```bash run_scripts.sh```.
 
 
