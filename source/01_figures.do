@@ -9,12 +9,11 @@
 clear all
 set more off
 
-local data_dir "data"
-local healthEmploy_data "`data_dir'/raw/employment/employment_annual_data_2018-02-16.csv"
-local employ_data "`data_dir'/raw/employment_bls.xlsx"
-local spend_data "`data_dir'/raw/provider-state-estimates/PROV_US_AGGREGATE14.CSV"
-local gdp_deflator "`data_dir'/raw/gdp_deflator.xlsx"
-local pop_data "`data_dir'/raw/resident-state-estimates/US_POPULATION14.CSV" 
+local healthEmploy_data "data/health_employment/employment_annual_data.csv"
+local employ_data "data/employment/employment_bls.xlsx"
+local spend_data "data/health_spending/provider-state-estimates/PROV_US_AGGREGATE14.CSV"
+local gdp_deflator "data/gdp_deflator/gdp_deflator.xlsx"
+local pop_data "data/health_spending/resident-state-estimates/US_POPULATION14.CSV" 
 local first_year 2000
 local last_year 2016
 

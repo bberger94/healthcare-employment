@@ -11,7 +11,7 @@ from <- '1990-01-01'
 to <- '2017-12-31'
 
 # Load series names
-series <- read_csv('data/raw/employment/fred_series_ids.csv')
+series <- read_csv('data/health_employment/fred_series_ids.csv')
 
 # Select which series we pull 
 # We only want states with health employment data OR 
@@ -63,9 +63,8 @@ annual_data <-
   spread(state, health_employ) 
 
 # Export employment data (all figures in 000's of persons)
-write_csv(data, paste0('data/raw/employment/employment_monthly_extract_', today(), '.csv'))
-
-write_csv(annual_data, paste0('data/raw/employment/employment_annual_data_', today(), '.csv'), na = '')
+write_csv(data, 'data/health_employment/health_employment_monthly.csv')
+write_csv(annual_data, 'data/health_employment/health_employment_annual.csv', na = '')
 
 
 
