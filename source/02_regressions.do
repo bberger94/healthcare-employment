@@ -9,7 +9,7 @@
 clear all
 set more off
 
-local healthEmploy_data "data/health_employment/employment_annual_data.csv"
+local healthEmploy_data "data/health_employment/health_employment_annual.csv"
 local employ_data "data/employment/employment_bls.xlsx"
 local spend_data "data/health_spending/provider-state-estimates/PROV_US_AGGREGATE14.CSV"
 local gdp_deflator "data/gdp_deflator/gdp_deflator.xlsx"
@@ -66,7 +66,7 @@ save "`healthEmploy_long'"
 ********************************************************************************
 **Load Healthcare spend data (provider)
 ********************************************************************************
-import delimited "`provider_spend_data'", clear
+import delimited "`spend_data'", clear
 
 keep if group == "State"
 keep item state_name y*
