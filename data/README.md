@@ -45,17 +45,17 @@
 
 5. 	Employment 
 	
-	-File Path: ```employment_bls.xlsx```
+	-File Path: ```data/raw/employment_bls.xlsx```
 
 	-Description: Total US employment by month
 
 	-Years: 1994-2016
 
-	-Notes: BLS data series. Number of private employees in thousands. Seasonally adjusted.
+	-Notes: BLS data series CES0500000001. Number of private employees in thousands. Seasonally adjusted.
 
 6. 	Processed data panel
 	
-	-File Path: ```data/raw/resident-state-estimates/US_POPULATION14.CSV```
+	-File Path: ```data/processed/health_panel_data```
 
 	-Description: Stata output; US population by state and year
 
