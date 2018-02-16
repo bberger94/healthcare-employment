@@ -1,1 +1,3 @@
 ./figures/*.eps
+.Rproj.user
+.DS_Store
