@@ -5,14 +5,13 @@
 * Author: Ben Berger
 * Notes: 
 * 1. Execute script from healthcare-employment directory
-* 2. Regression output is saved to a log file 
 *--------------------------------------------------
 
 clear all
 set more off
 
 local data_dir "data"
-local healthEmploy_data "`data_dir'/raw/Employment health care jan 6_16_16.xlsx"
+local healthEmploy_data "`data_dir'/raw/Employment_health_care_8-15-17.xlsx"
 local employ_data "`data_dir'/raw/employment_bls.xlsx"
 local provider_spend_data "`data_dir'/raw/provider-state-estimates/PROV_US_AGGREGATE14.CSV"
 local gdp_deflator "`data_dir'/raw/gdp_deflator.xlsx"
@@ -117,6 +116,7 @@ drop _merge
 merge 1:1 state year using "`healthEmploy_long'"
 drop _merge
 order state year healthSpend healthEmploy population
+sort state year
 
 * Write the data to file
 save "data/processed/health_panel_data.dta", replace
@@ -156,14 +156,8 @@ reg spendGrow_10_14 	employGrow_10_14 employGrow_04_09 spendGrow_04_09 ///
 reg spendGrow_10_14 	employGrow_04_09 spendGrow_04_09 ///
 			[aw=avg_population_10_14], robust
 
+
 *log close
-
-
-
-
-
-
-
 /*
 reg spendGrow_10_14 ///
     employGrow_04_09 spendGrow_04_09, robust
