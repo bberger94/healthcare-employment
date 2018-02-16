@@ -10,26 +10,24 @@ clear all
 set more off
 
 local data_dir "data"
-local healthEmploy_data "`data_dir'/raw/Employment_health_care_8-15-17.xlsx"
-//local healthEmploy_data "`data_dir'/Employment health care jan 6_16_16.xlsx"
+local healthEmploy_data "`data_dir'/raw/employment/employment_annual_data_2018-02-16.csv"
 local employ_data "`data_dir'/raw/employment_bls.xlsx"
 local spend_data "`data_dir'/raw/provider-state-estimates/PROV_US_AGGREGATE14.CSV"
 local gdp_deflator "`data_dir'/raw/gdp_deflator.xlsx"
 local pop_data "`data_dir'/raw/resident-state-estimates/US_POPULATION14.CSV" 
 local first_year 2000
+local last_year 2016
 
 
 ********************************************************************************
 ********************************************************************************
 **Load Healthcare employment data
 ********************************************************************************
-import excel "`healthEmploy_data'", ///
-	sheet("Master") ///
-	firstrow ///
-	clear
+import delimited "`healthEmploy_data'", ///
+	clear case(preserve)
 	
 rename * healthEmploy_*
-rename healthEmploy_A year
+rename healthEmploy_year year
 keep if year >= `first_year'
 
 *Drop states without data for `first_year' or any year after
@@ -139,9 +137,10 @@ merge m:1 year using "`health_spend'", nogenerate
 merge m:1 year using "`employ'", nogenerate
 sort year
 
+drop if year > `last_year'
+
 /*    Scale each variable so that their
       value in 2000 (or whatever is the first year in data) = 100  */
-      
 foreach var of varlist employ_total healthEmploy_total spend_real_pc {
 	summarize `var' if year == `first_year'
 	replace `var' = `var'/`r(min)' * 100

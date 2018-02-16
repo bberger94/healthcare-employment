@@ -11,7 +11,7 @@ clear all
 set more off
 
 local data_dir "data"
-local healthEmploy_data "`data_dir'/raw/Employment_health_care_8-15-17.xlsx"
+local healthEmploy_data "`data_dir'/raw/employment/employment_annual_data_2018-02-16.csv"
 local employ_data "`data_dir'/raw/employment_bls.xlsx"
 local provider_spend_data "`data_dir'/raw/provider-state-estimates/PROV_US_AGGREGATE14.CSV"
 local gdp_deflator "`data_dir'/raw/gdp_deflator.xlsx"
@@ -23,7 +23,7 @@ local pop_data "`data_dir'/raw/resident-state-estimates/US_POPULATION14.CSV"
 ********************************************************************************
 ** Load Population data
 ********************************************************************************
-import delimited "`pop_data'", clear
+import delimited "`pop_data'", clear 
 keep if group == "State"
 keep state_name y*
 
@@ -41,13 +41,12 @@ save "`population_long'"
 ********************************************************************************
 **Load Healthcare employment data
 ********************************************************************************
-import excel "`healthEmploy_data'", ///
-	sheet("Master") ///
-	firstrow ///
-	clear
+import delimited "`healthEmploy_data'", ///
+	clear ///
+	case(preserve)
 
 rename * healthEmploy_*
-rename healthEmploy_A year
+rename healthEmploy_year year
 
 reshape long  healthEmploy_ , i(year) j(state) string
 rename healthEmploy_ healthEmploy
