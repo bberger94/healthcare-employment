@@ -1,0 +1,256 @@
+--------------------------------------------------
+      name:  <unnamed>
+       log:  /disk/homedirs/nber/bergerb/Projects/
+> healthcare-employment/logs/03_percapita_analysis
+> .log
+  log type:  text
+ opened on:  17 Feb 2018, 17:19:35
+
+. 
+. * Adapted from a script by Jon Skinner 
+. * Making Figure for employment and spending
+. 
+. *ssc install statastates
+. set more off
+
+. clear
+
+. 
+. use data/processed/health_panel_data.dta 
+
+. 
+. * Drop DC
+. drop if state == "District of Columbia"
+(35 observations deleted)
+
+. 
+. * Create per-capita measures
+. gen emp_pc = healthEmploy/population
+(925 missing values generated)
+
+. gen spend_pc = healthSpend/population
+(673 missing values generated)
+
+. 
+. label var emp_pc "Health Sector Jobs per capita"
+
+. label var spend_pc "Health Spending per capita" 
+
+. 
+. pwcorr emp_pc spend_pc if year == 2014, sig
+
+             |   emp_pc spend_pc
+-------------+------------------
+      emp_pc |   1.0000 
+             |
+             |
+    spend_pc |   0.8350   1.0000 
+             |   0.0000
+             |
+
+. pwcorr emp_pc spend_pc [aw=pop] if year == 2014,
+>  sig
+
+             |   emp_pc spend_pc
+-------------+------------------
+      emp_pc |   1.0000 
+             |
+             |
+    spend_pc |   0.8433   1.0000 
+             |   0.0000
+             |
+
+. 
+. * Load in state abbreviations
+. statastates, name(state) 
+(1,873 real changes made)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             1
+        from master                         0  (_m
+> erge==1)
+        from using                          1  (_m
+> erge==2)
+
+    matched                             1,873  (_m
+> erge==3)
+    -----------------------------------------
+
+. twoway scatter spend_pc emp_pc if year == 2014, 
+> mlabel(state_abbrev)
+
+. 
+. *Now to look at the relevant measures by year:
+. tab year [aw=pop], sum(emp_pc)
+
+            |    Summary of Health Sector Jobs per
+>  capita
+       year |        Mean   Std. Dev.       Freq. 
+>        Obs.
+------------+-------------------------------------
+> -----------
+       1991 |   .03504402   .00600121   215796000 
+>          37
+       1992 |   .03595333   .00624367   218884000 
+>          37
+       1993 |    .0366507   .00654591   221858000 
+>          37
+       1994 |   .03717833   .00670601   224647000 
+>          37
+       1995 |   .03784773   .00681524   232567000 
+>          38
+       1996 |   .03830219   .00685582   235339000 
+>          38
+       1997 |   .03877041   .00686976   238247000 
+>          38
+       1998 |   .03902381   .00698864   241134000 
+>          38
+       1999 |   .03899977   .00708527   244004000 
+>          38
+       2000 |   .03910829   .00718727   246826000 
+>          38
+       2001 |   .03971581   .00711484   263466000 
+>          40
+       2002 |   .04060856   .00722717   265930000 
+>          40
+       2003 |   .04122746   .00728175   268873000 
+>          41
+       2004 |   .04167398   .00737999   271325000 
+>          41
+       2005 |   .04219472   .00758363   273804000 
+>          41
+       2006 |   .04271099   .00782385   276400000 
+>          41
+       2007 |   .04345925   .00794874   278973000 
+>          41
+       2008 |   .04417185   .00805175   281590000 
+>          41
+       2009 |   .04466592      .00821   284076000 
+>          41
+       2010 |   .04500125   .00828829   286475000 
+>          41
+       2011 |   .04545468   .00835856   288663000 
+>          41
+       2012 |   .04594751   .00846902   290848000 
+>          41
+       2013 |   .04632231   .00854831   292922000 
+>          41
+       2014 |   .04664903   .00860412   295131000 
+>          41
+------------+-------------------------------------
+> -----------
+      Total |   .04144495   .00818668  6237778000 
+>         948
+
+. tab year [aw=pop], sum(spend_pc)
+
+            |      Summary of Health Spending per 
+> capita
+       year |        Mean   Std. Dev.       Freq. 
+>        Obs.
+------------+-------------------------------------
+> -----------
+       1991 |   8393.7569   973.43449   252382000 
+>          50
+       1992 |   8760.7263   1024.4871   255919000 
+>          50
+       1993 |   8990.6334   1070.9001   259322000 
+>          50
+       1994 |   9162.2582   1110.1895   262532000 
+>          50
+       1995 |   9404.6962   1138.4566   265696000 
+>          50
+       1996 |   9633.9886   1152.4946   268824000 
+>          50
+       1997 |   9890.4815    1184.538   272076000 
+>          50
+       1998 |   10235.585   1247.6942   275289000 
+>          50
+       1999 |   10560.884   1303.0494   278470000 
+>          50
+       2000 |   10926.311   1372.2113   281593000 
+>          50
+       2001 |   11486.991   1466.4913   284397000 
+>          50
+       2002 |   12147.642   1535.2978   287050000 
+>          50
+       2003 |   12758.687    1634.555   289539000 
+>          50
+       2004 |       13220   1686.0065   292239000 
+>          50
+       2005 |   13556.422   1670.0631   294946000 
+>          50
+       2006 |    13859.24    1735.923   297813000 
+>          50
+       2007 |   14216.738   1792.4399   300658000 
+>          50
+       2008 |   14476.981   1812.1984   303512000 
+>          50
+       2009 |   14969.601   1951.6534   306184000 
+>          50
+       2010 |   15222.139   2004.8646   308746000 
+>          50
+       2011 |   15328.025   2002.1789   311042000 
+>          50
+       2012 |   15553.915   1943.9442   313364000 
+>          50
+       2013 |   15647.453   1980.1584   315557000 
+>          50
+       2014 |   16053.856   2003.2317   317905000 
+>          50
+------------+-------------------------------------
+> -----------
+      Total |   12441.393   2977.2387  6895055000 
+>       1,200
+
+. 
+. * Time-series analysis
+. sort state
+
+. encode state, gen(state_n)
+
+. sum state_n
+
+    Variable |        Obs        Mean    Std. Dev.
+>        Min        Max
+-------------+------------------------------------
+> ---------------------
+     state_n |      1,874    26.26041    14.71061 
+>          1         51
+
+. tsset state_n year
+       panel variable:  state_n (unbalanced)
+        time variable:  year, 1980 to 2017
+                delta:  1 unit
+
+. 
+. * Spending per job in 2014
+. keep if year == 2014
+(1,824 observations deleted)
+
+. 
+. drop if emp_pc == .
+(9 observations deleted)
+
+. drop if spend_pc == .
+(0 observations deleted)
+
+. 
+. egen tot_emp = sum(healthEmploy)
+
+. egen tot_spend = sum(healthSpend)
+
+. disp tot_spend/tot_emp
+345994.57
+
+. 
+. 
+. log close
+      name:  <unnamed>
+       log:  /disk/homedirs/nber/bergerb/Projects/
+> healthcare-employment/logs/03_percapita_analysis
+> .log
+  log type:  text
+ closed on:  17 Feb 2018, 17:19:37
+--------------------------------------------------
