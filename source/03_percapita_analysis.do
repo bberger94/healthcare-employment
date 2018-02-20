@@ -1,5 +1,5 @@
 capture log close
-log using "source/03_percapita_analysis.log", replace
+log using "logs/03_percapita_analysis.log", replace
 
 * Adapted from a script by Jon Skinner 
 * Making Figure for employment and spending
