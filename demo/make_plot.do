@@ -19,4 +19,4 @@ pwcorr emp_pc spend_pc [aw=pop], sig
 
 * Make plot
 twoway scatter spend_pc emp_pc, mlabel(state_abbrev)
-graph save "scatterplot.eps", replace
+graph export "scatterplot.eps", replace
