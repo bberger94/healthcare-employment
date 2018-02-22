@@ -115,6 +115,11 @@ drop _merge
 order state year healthSpend healthEmploy population
 sort state year
 
+* Load in state abbreviations
+statastates, name(state) 
+drop state_fips _merge
+
+
 * Write the data to file
 save "data/processed/health_panel_data.dta", replace
 
